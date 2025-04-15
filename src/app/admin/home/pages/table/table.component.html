@@ -1,0 +1,101 @@
+<div class="container">
+    @if(curTable()){
+        <div class="upper">
+                <form class="main bloc">
+                    <label class="title dark">
+                        <h1>
+                            Наименование
+                        </h1>
+                        <input type="text"
+                        placeholder="Введите имя стола"
+                        [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="nameVal"
+                        readonly
+                        >
+                        
+                    </label>
+
+                    <label class="capacity mt-4 dark">
+                        <h1>
+                            Вместительность
+                        </h1>
+                        <input type="number"
+                        placeholder="Введите максимальную вместимость"
+                        [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="capacityVal">
+                        
+                    </label>
+
+                    <div class="mt-4 features">
+                        <label>
+                            <h1>
+                                Особенности
+                            </h1>
+                        </label>
+                        <div class="features-container">
+                            @for(feature of curTable()!.features; track $index){
+                                <div class="feature">
+                                    <p>
+                                        {{feature}}
+                                    </p>
+                                    <svg (click)="removeFeature($index)"
+                                      xmlns="http://www.w3.org/2000/svg"  width="16"  height="16"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="del"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+                                    
+                                </div>
+                            }
+
+                            @if(!newFeature()){
+                                <div class="plus" (click)="newFeature.set(true)">
+                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="16"  height="16"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class=""><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                                </div>
+                                
+                            }@else{
+                                <input type="text" class="small"
+                                maxlength="30"
+                                placeholder="новая особенность"
+                                [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="featureVal"
+                                (focusout)="addFeature()"
+                                (keydown.enter)="addFeature()"
+                                
+                                >
+                            }
+                        </div>
+                        
+                    </div>
+
+                        <button class="small-button btn" (click)="submit()">
+                            Сохранить
+                        </button>
+                    
+                </form>
+    
+            <div class="booking-container bloc">
+
+                <p class="title">Брони</p>
+
+                @for(booking of bookingsList(); track $index){
+                    <a class="booking"
+                    [routerLink]="'/admin/statistics/' + navService.locationId()" [queryParams]="{
+                        focus_id:booking.booking_id
+                        }"
+                    >
+                        <div class="data-container">
+                            <p>{{booking.name}}</p>
+
+                            <p>{{booking.time_start}} {{booking.date_start}} - {{booking.time_end}} {{booking.date_end}}</p>
+                        </div>
+
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class=""><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11 4l3 8l-3 8" /></svg>
+                    </a>
+                }
+            </div>
+        </div>
+    
+        <div class="lower bloc">
+    
+        </div>
+    }@else{
+        <p>Стол не найден</p>
+    }
+</div>

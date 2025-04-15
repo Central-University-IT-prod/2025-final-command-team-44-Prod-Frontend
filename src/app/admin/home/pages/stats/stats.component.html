@@ -1,0 +1,199 @@
+<p class="text-3xl font-semibold">Аналитика</p>
+<div class="container">
+    
+        @if(fullyLoaded()){
+            <mat-spinner coloor="blue"/>
+        }
+        <div class="tables" #tcontainer [class.hid]="fullyLoaded()">
+
+        </div>
+    
+        <div class="book-stats" #bcontainer [class.hid]="fullyLoaded()">
+            @if(chosenBookId()){
+                <form action="" class="edit-form">
+                    <div class="scrollable">
+                        @if(!isNewBooking()){
+                            <label class="dark">
+                                <p>Пользователь</p>
+                                <input type="text"
+                                class="mt-1"
+                                readonly
+                                placeholder="Введите имя клиента"
+                                [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="nameVal">
+                            </label>
+        
+                            <label class="dark">
+                                <p>Ник в телеграме</p>
+                                <input type="text"
+                                class="mt-1"
+                                readonly
+                                placeholder="Введите логин клиента в телеграме"
+                                [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="usernameVal">
+                            </label>
+                        }@else{
+                                    
+                            <label class="dark">
+                                <p>Номер телефона</p>
+                                <p class="sub">формата 7XXXXXXXXXX</p>
+                                <input type="tel"
+                                class="mt-1"
+                                pattern="[7]{1}[0-9]{10}"
+                                placeholder="Введите номер клиента"
+                                [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="telVal">
+                            </label>
+                        }
+
+
+                    <label class="mt-2 dark">
+                        <p>Количество человек</p>
+                        <input type="number"
+                               class="mt-1"
+                               placeholder="Введите количество человек"
+                               [ngModelOptions]="{standalone: true}"
+                               [(ngModel)]="amountVal">
+                    </label>
+
+                    <label class="time mt-2 dark">
+                        <p>Время начала</p>
+                        <input type="datetime-local"
+                               class="mt-1"
+                               step="3600"
+                               (focusout)="onChangeTime()"
+                               [ngModelOptions]="{standalone: true}"
+                               [(ngModel)]="sTimeVal">
+                    </label>
+
+                    <label class="time mt-2">
+                        <p>Количество часов</p>
+                        <div class="flex flex-row gap-5">
+                            <div class="select dark w-full mt-1">
+                                <select
+                                        (change)="onChangeTime()"
+                                        [ngModelOptions]="{standalone: true}"
+                                        [(ngModel)]="eTimeVal">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                </select>
+                            </div>
+                            <div class="w-[52px] h-[52px]">
+                                <button style="width: 52px; height: 52px; padding: 0;" class="small-button btn-black" (click)="remove()">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                            </div>
+                
+                            <div class="w-[52px] h-[52px]">
+                                <button style="width: 52px; height: 52px; padding: 0;" class="small-button btn-black" (click)="add()">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </label>
+
+                    <div class="mt-2">
+                        <p>Пожелания</p>
+                        <div class="features-container mt-1">
+                            @for (feature of newFeatures(); track $index) {
+                                <div class="feature">
+                                    <p>
+                                        {{ feature }}
+                                    </p>
+                                    <svg (click)="removeFeature($index)"
+                                         xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="del">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M18 6l-12 12"/>
+                                        <path d="M6 6l12 12"/>
+                                    </svg>
+
+                                </div>
+                            }
+
+                            @if (!newFeature()) {
+                                <div class="plus" (click)="newFeature.set(true)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M12 5l0 14"/>
+                                        <path d="M5 12l14 0"/>
+                                    </svg>
+                                </div>
+
+                            } @else {
+                                <input type="text" class="small dark"
+                                       maxlength="30"
+                                       placeholder="новое пожелание"
+                                       [ngModelOptions]="{standalone: true}"
+                                       [(ngModel)]="featureVal"
+                                       (focusout)="addFeature()"
+                                       (keydown.enter)="addFeature()"
+
+                                >
+                            }
+                        </div>
+                    </div>
+
+                    @if (chosenBookData().members.length) {
+                        <div>
+                            <p>Участники</p>
+                            <div class="features-container">
+                                @for (member of chosenBookData().members; track $index) {
+                                    <div class="member">
+                                        <p>{{ member.first_name }}</p>
+                                        <a class="username" [href]="'https://telegram.me/' + member.username">
+                                            &#64;{{ member.username }}
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <label>
+                        <p>Комментарий</p>
+                        <textarea class="comment dark"
+                                  placeholder="Введите комментарий клиента"
+                                  [ngModelOptions]="{standalone: true}"
+                                  [(ngModel)]="commentVal">
+                            >{{chosenBookData().comment}}</textarea>
+                    </label>
+                </div>
+
+
+                <div class="btns">
+
+                    <button class="medium-button btn" (click)="submit()"
+                    >Сохранить
+                    </button>
+
+                    <button class="medium-button btn delete-btn" (click)="deleteChosen()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M4 7h16"/>
+                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/>
+                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/>
+                            <path d="M10 12l4 4m0 -4l-4 4"/>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        }
+    </div>
+
+    <div class="scroll-btn" (click)="scrollDown()" [class.reversed]="scroll()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M4 11l8 3l8 -3"/>
+        </svg>
+    </div>
+</div>

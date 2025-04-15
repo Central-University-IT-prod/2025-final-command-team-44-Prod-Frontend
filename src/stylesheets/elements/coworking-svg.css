@@ -1,0 +1,58 @@
+g[id*="_table"] {
+    cursor: pointer;
+
+    * {
+        transition-duration: .3s;
+    }
+
+    &:hover {
+        *[id*="table"] {
+            fill: var(--background-neutral);
+        }
+    }
+}
+
+g[id*="room"] {
+    cursor: pointer;
+    transition-duration: .3s;
+    opacity: 1;
+
+    &:hover {
+        opacity: .8;
+    }
+}
+
+g[id*="table"]:not([id*="_table"]) {
+    cursor: pointer;
+    transition-duration: .3s;
+    opacity: 1;
+
+    &:hover {
+        opacity: .8;
+    }
+}
+
+text {
+    fill: var(--text-primary);
+}
+
+*[id*="стена"] {
+    stroke: var(--background-secondary);
+}
+
+.availableTable {
+    fill: #ced544 !important;
+}
+
+.notAvailableTable {
+    opacity: .3 !important
+}
+
+.selectedAvailableTable {
+    fill: #007aff !important;
+}
+
+.selectedNotAvailableTable {
+    fill: #1a237e !important;
+}
+

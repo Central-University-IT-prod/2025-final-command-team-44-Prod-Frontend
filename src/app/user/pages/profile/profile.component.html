@@ -1,0 +1,62 @@
+<p class="w-full text-3xl mt-5 mb-2 flex flex-row items-center font-semibold gap-3">
+    Мои брони
+</p>
+<div class="toggle-container">
+    <div [class.chosen]="toggleFilter === 'all'" (click)="toggleFilter = 'all'" class="toggle">Все</div>
+    <div [class.chosen]="toggleFilter === 'table'" (click)="toggleFilter = 'table'" class="toggle">Столы</div>
+    <div [class.chosen]="toggleFilter === 'room'" (click)="toggleFilter = 'room'" class="toggle">Комнаты</div>
+</div>
+
+<div class="container">
+    @for (booking of cards() | bookingPipe:toggleFilter; track cards(); let i = $index) {
+        <div (click)="navigate(booking.booking_id)" [style.--delay]="i*100 + 'ms'" class="card">
+            <div>
+                <p class="text-text-primary text-lg font-semibold">{{ getName(booking) }}</p>
+                <p class="text-text-secondary">{{ getBookingTime(booking) }}</p>
+            </div>
+
+            <div class="code">
+                <p class="text-xl font-semibold" style="letter-spacing: 3px;">{{ booking.code }}</p>
+            </div>
+
+            <div>
+                <svg (click)="cancelBooking(booking)" xmlns="http://www.w3.org/2000/svg" class="stroke-red-600"
+                     width="30"
+                     viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M4 7l16 0"/>
+                    <path d="M10 11l0 6"/>
+                    <path d="M14 11l0 6"/>
+                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/>
+                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/>
+                </svg>
+            </div>
+        </div>
+    }
+
+    @if (toggleFilter !== 'room') {
+        @for (queue of queues(); track cards(); let i = $index) {
+            <div style="border-left-color: var(--purple-60);" [style.--delay]="(i + cards().length)*100 + 'ms'" class="card">
+                <div>
+                    <p class="text-text-primary text-lg font-semibold">{{ queue.location.name }}</p>
+                    <p class="text-text-secondary uppercase">Очередь</p>
+                </div>
+
+                <div>
+                    <svg (click)="cancelQueue(queue)" xmlns="http://www.w3.org/2000/svg" class="stroke-red-600"
+                         width="30"
+                         viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M4 7l16 0"/>
+                        <path d="M10 11l0 6"/>
+                        <path d="M14 11l0 6"/>
+                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/>
+                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/>
+                    </svg>
+                </div>
+            </div>
+        }
+    }
+</div>

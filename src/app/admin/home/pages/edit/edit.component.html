@@ -1,0 +1,42 @@
+<div class="container">
+
+    @if (location !== null) {
+
+        <div>
+            <p>Название</p>
+            <label>
+                <input
+                        type="text"
+                        [(ngModel)]="this.location!.name"
+                >
+            </label>
+        </div>
+        <div>
+            <p>Адрес</p>
+            <label>
+                <input
+                        type="text"
+                        [(ngModel)]="this.location!.address"
+                >
+            </label>
+        </div>
+        <div>
+            <p>План зала</p>
+            <label>
+                <input type="file" (change)="svgChoiceHandler($event)">
+            </label>
+        </div>
+
+        @if (svgContent()) {
+            <div class="preview" [innerHtml]="svgContent()"></div>
+        }
+
+        <button (click)="save()" class="large-button">Сохранить</button>
+    } @else {
+        <mat-spinner color="blue"/>
+    }
+</div>
+
+<div class="block" #block>
+    <mat-spinner color="blue"/>
+</div>

@@ -1,0 +1,33 @@
+<div class="container">
+
+    <p class="w-full text-3xl mt-5 mb-2 flex flex-row items-center font-semibold gap-3">
+        Ближайшие коворкинги
+    </p>
+
+    @for (coworking of coworkings()|locationPipe; track coworkings(); let i = $index) {
+        <a [routerLink]="'/user/coworking/' + coworking.id" class="w-full">
+            <div class="card gap-10" style="animation: none; transform: none; opacity: 1;">
+                <div class="w-full">
+                    <p class="text-text-primary text-lg font-semibold">{{ coworking.name }}</p>
+                    <p class="text-text-secondary flex flex-row items-center gap-1">{{ coworking.address }}</p>
+                </div>
+            </div>
+        </a>
+    }
+
+    <p class="w-full text-3xl mt-5 mb-2 flex flex-row items-center font-semibold gap-3">
+        Часто посещаемые места
+    </p>
+
+    @for (coworking of coworkings(); track coworkings(); let i = $index) {
+        <a [routerLink]="'/user/coworking/' + coworking.id" class="w-full">
+            <div [style.--delay]="i*100 + 'ms'" class="card gap-10">
+                <div class="w-full">
+                    <p class="text-text-primary text-lg font-semibold">{{ coworking.name }}</p>
+                    <p class="text-text-secondary flex flex-row items-center gap-1">{{ coworking.address }}</p>
+                </div>
+            </div>
+        </a>
+    }
+
+</div>

@@ -1,0 +1,17 @@
+@import '../../../../user/pages/home/home.component.css';
+
+.container {
+    width: 100%;
+
+    .card {
+        animation: none;
+        transform: none;
+        opacity: 1;
+        transition-duration: .3s;
+
+        &:hover {
+            background: var(--background-secondary);
+            box-shadow: 0 0 10px -3px #ffffff70;
+        }
+    }
+}

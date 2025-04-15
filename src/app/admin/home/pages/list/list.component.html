@@ -1,0 +1,24 @@
+
+<div class="w-full flex flex-row justify-between items-center mb-5">
+    <p class="text-3xl font-semibold">Мои коворкинги</p>
+    <button (click)="createLocation()" class="small-button">Добавить</button>
+</div>
+
+<div class="container">
+    @if (locations() === null) {
+        <mat-spinner color="blue" diameter="40"/>
+    } @else {
+        @for (card of locations() || []; track $index) {
+            <a class="w-full" [routerLink]="'/admin/statistics/' + card.id">
+                <div class="card">
+                    <div class="info">
+                        <h3>{{ card.name }}</h3>
+                        <h4>{{ card.address }}</h4>
+                    </div>
+                </div>
+            </a>
+        } @empty {
+            <p>Empty list</p>
+        }
+    }
+</div>

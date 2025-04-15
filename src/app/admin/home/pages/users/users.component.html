@@ -1,0 +1,166 @@
+<div class="container">
+
+    @if (usersList().length) {
+        <form class="filter-container" (click)="this.openedCardId.set('')">
+            <label>
+                Ключевые слова
+                <input type="text"
+                       placeholder="Введите имя или тэг"
+                       [(ngModel)]="filterName"
+                       [ngModelOptions]="{standalone: true}"
+
+                >
+            </label>
+            <div class="flex flex-row gap-3">
+                <label>
+                    <p>Начало интервала</p>
+                    <input type="datetime-local"
+                           [(ngModel)]="filterStart"
+                           [ngModelOptions]="{standalone: true}"
+                    >
+                </label>
+
+                <label>
+                    <p>Конец интервала</p>
+                    <input type="datetime-local"
+                           [(ngModel)]="filterEnd"
+                           [ngModelOptions]="{standalone: true}"
+                    >
+                </label>
+            </div>
+        </form>
+    }
+
+    @if (!usersList().length) {
+        <p class="text-3xl font-semibold">Нет броней</p>
+    }
+    @if (usersList().length) {
+        <div class="inner-container" #inner (click)="missClick($event)">
+            @for (user of usersList(); track $index) {
+                @if (filterCard(user)) {
+                    @if ($index == 0 || user.date_start != usersList()[$index - 1].date_start) {
+                        @if (user.date_start == date_today) {
+                            <p class="timemark">Сегодня</p>
+                        } @else {
+                            <p class="timemark">{{ user.date_start }}</p>
+                        }
+
+                    }
+                    <div class="user-wrapper"
+                         [style.animation-duration]="($index + 1) * 200 + 'ms'"
+                         (click)="openedCardId.set(user.booking_id)"
+                         [class.opened]="openedCardId() == user.booking_id"
+                    >
+
+                        <div class="data-container">
+
+
+                            <p class="uplabel">
+                                Клиент
+                            </p>
+
+                            <p class="uplabel">
+                                Начало
+                            </p>
+                            <p class="uplabel">
+                                Конец
+                            </p>
+                            <p class="uplabel">
+                                Участников
+                            </p>
+                            <p class="uplabel">
+                                Код
+                            </p>
+
+                            <div class="credits">
+                                <p class="first-name">
+                                    {{ user.name }}
+                                </p>
+
+                                <a class="username" [href]="'https://telegram.me/' + user.telegram_username">
+                                    &#64;{{ user.telegram_username }}
+                                </a>
+                            </div>
+
+                            @if (user.date_start == user.date_end) {
+                                <p class="start time">
+                                    {{ user.time_start }}
+                                </p>
+
+                                <p class="end time">
+                                    {{ user.time_end }}
+                                </p>
+                            } @else {
+                                <p class="start time">
+                                    {{ user.time_start }}&nbsp;&nbsp;{{ user.date_start }}
+                                </p>
+
+                                <p class="end time">
+                                    {{ user.time_end }}&nbsp;&nbsp;{{ user.date_end }}
+                                </p>
+                            }
+
+                            <p class="amount">
+                                {{ user.amount }}
+                            </p>
+
+                            <p class="code">
+                                {{ user.code }}
+                            </p>
+                        </div>
+
+
+                        <div class="actions-container">
+                            <div class="commentary-container">
+                                <p class="mt-4 sub">Участники</p>
+                                <div class="members-container">
+                                    @for (member of user.members; track $index) {
+                                        <div class="member">
+                                            <p>{{ member.first_name }}</p>
+                                            <a class="username" [href]="'https://telegram.me/' + member.username">
+                                                &#64;{{ member.username }}
+                                            </a>
+                                        </div>
+                                    }
+                                </div>
+
+                                @if (user.features.length > 0) {
+                                    <p class="mt-4 sub">Пожелания</p>
+                                    <div class="features-container">
+                                        @for (feature of user.features; track $index) {
+                                            <div class="feature">
+                                                <p>{{ feature }}</p>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+
+                                @if (user.comment) {
+                                    <p class="mt-4 sub">Комментарий</p>
+                                    <div class="comment">
+                                        <p>"
+                                            {{ user.comment }}
+                                           "</p>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="btns">
+                                <button class="small-button btn ban" (click)="removeBooking($index, user.booking_id)">
+                                    Отменить
+                                </button>
+                                <a [routerLink]="'/admin/statistics/' + navService.locationId()" [queryParams]="{
+                                    focus_id:user.booking_id
+                                    }">
+                                    <button class="small-button btn">
+                                        Перейти
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    } @else {}
+</div>

@@ -1,0 +1,20 @@
+<div class="flex flex-col gap-5">
+    <div class="flex flex-row gap-5">
+        <button class="small-button btn-black" (click)="zoomOut()">
+            <mat-icon>zoom_out</mat-icon>
+        </button>
+        <button class="small-button btn-black" (click)="zoomIn()">
+            <mat-icon>zoom_in</mat-icon>
+        </button>
+    </div>
+</div>
+
+<div class="image-container mt-10">
+    @if (!svg) {
+        <div style="display: flex;justify-content: center">
+            <mat-spinner color="primary" diameter="40"></mat-spinner>
+        </div>
+    } @else {
+        <div #imageElement [innerHtml]="svg" class="section-svg" [style.width]="width"></div>
+    }
+</div>

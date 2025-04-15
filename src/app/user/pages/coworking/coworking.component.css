@@ -1,0 +1,66 @@
+.rent-info {
+    margin-bottom: 20px;
+
+    .date-time {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.image-container {
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    max-height: 70vh;
+    margin-bottom: 122px;
+}
+
+.btn-black {
+    width: 100%;
+    background: var(--background-secondary);
+
+    &:hover {
+        background: var(--background-neutral);
+    }
+}
+
+.queue-btn  {
+    max-width: 700px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    position: fixed;
+    bottom: var(--header-height);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--background-secondary);
+    border-radius: var(--br-16) var(--br-16) 0 0;
+    z-index: 10;
+}
+
+.section-svg {
+    &:active {
+        cursor: grab!important;
+    }
+}
+
+.date-selects {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    gap: 16px;
+
+    .date-item {
+        width: 100%;
+    }
+
+    @media screen and (max-width: 500px) {
+        flex-wrap: wrap;
+    }
+}

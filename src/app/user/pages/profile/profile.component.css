@@ -1,0 +1,42 @@
+@import '../home/home.component.css';
+
+.toggle-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 5px;
+    background: var(--background-secondary);
+    border-radius: var(--br-16);
+
+    .toggle {
+        width: 100%;
+        padding: 10px 0;
+        border-radius: var(--br-8);
+        background: var(--background-secondary);
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        &.chosen {
+            background: var(--blue-60);
+            font-weight: 500;
+        }
+    }
+}
+
+.container {
+    all: unset;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.card {
+    justify-content: space-between;
+}

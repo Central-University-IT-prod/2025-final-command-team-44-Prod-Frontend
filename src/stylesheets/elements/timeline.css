@@ -1,0 +1,84 @@
+.vis-timeline{
+    border: none;
+}
+
+
+.vis-label{
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.vis-panel.vis-left{
+    border: none;
+}
+
+.vis-panel.vis-center{
+    border: none;
+}
+
+
+.vis-labelset .vis-label{
+    border: none;
+}
+
+.vis-foreground .vis-group{
+    border-bottom: none;
+    overflow: visible;
+}
+
+
+.vis-panel.vis-bottom{
+    border: none;
+}
+
+.vis-itemset{
+    transition: all var(--fast-transition-time);
+}
+
+.vis-background{
+    opacity: 0.2;
+}
+
+.vis-item.vis-range{
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: var(--background-neutral);
+    border: none ;
+    border-radius: 12px;
+    color: var(--text-primary);
+    transition: background-color var(--fast-transition-time);
+
+}
+
+.vis-content{
+    transform: translateY(0px);
+}
+
+
+.vis-item.vis-selected{
+    background-color: var(--interaction-secondary);
+    transition: none;
+}
+
+.vis-item .vis-delete{
+    display: none;
+    margin-right: 0px;
+    background:none;
+    top: -12px;
+    transition: all var(--fast-transition-time);
+    border-radius: 50%;
+}
+
+.vis-item .vis-delete:hover{
+    transform: scale(1.2);
+    background:none;
+    transform-origin: center;
+    border-radius: 50%;
+}
+
+.vis-item .vis-delete::after{
+    position: relative;
+    bottom: 4px;
+}

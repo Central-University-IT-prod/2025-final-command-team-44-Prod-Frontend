@@ -1,0 +1,166 @@
+<div class="container" style="position: relative;">
+
+    <p>Ваша бронь</p>
+
+    @if (loaded()) {
+        <div class="info">
+            <img src="info-background.png">
+            <div style="padding: 0 16px;" class="flex flex-row justify-between w-full">
+                <p class="text-3xl font-semibold">{{ name }}</p>
+            </div>
+
+            <div class="bottom">
+                <p class="">{{ time }}</p>
+            </div>
+
+            <div class="user">
+                <div class="w-full flex items-center flex-col">
+                    <p class="text-sm text-background-neutral uppercase">{{ status }}</p>
+                    <p class="text-background-primary font-semibold text-xl tracking-wide">
+                        {{ userService.currentUser()?.first_name }}
+                    </p>
+                </div>
+                <div class="w-full flex items-center flex-col">
+                    <p class="text-sm text-background-neutral">ПОДТВЕРЖДЕНИЕ</p>
+                    <p class="text-background-primary font-semibold text-xl tracking-wide">{{ booking.code }}</p>
+                </div>
+            </div>
+        </div>
+
+        @if (booking.status === 'creator') {
+            <div class="flex w-full flex-row gap-5">
+                <div (click)="open(0)" class="action" #action>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M20 10h-16l5.5 -6"/>
+                        <path d="M4 14h16l-5.5 6"/>
+                    </svg>
+                    <p>Перенос<br>бронирования</p>
+                </div>
+                <div (click)="open(1)" class="action" #action>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M20.984 12.535a9 9 0 1 0 -8.468 8.45"/>
+                        <path d="M16 19h6"/>
+                        <path d="M19 16v6"/>
+                        <path d="M12 7v5l3 3"/>
+                    </svg>
+                    <p>Продление<br>бронирования</p>
+                </div>
+            </div>
+
+            <div class="active-content" #activeContent>
+                <div class="content">
+                    @if (openedMenu === 0) {
+                        <p class="text-lg font-semibold mb-1">Перенести бронирование</p>
+                        <div class="select">
+                            <select [(ngModel)]="reservationDate">
+                                @for (date of availableDates; track [availableDates]; let i = $index) {
+                                    <option [value]="date">
+                                        @if (i === 0) {
+                                            Сегодня
+                                        } @else if (i == 1) {
+                                            Завтра
+                                        } @else {
+                                            {{ addMonthNameToDateString(date) }}
+                                        }
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        <p class="text-lg font-semibold mb-1">Время начала брони</p>
+                        <div class="select">
+                            <select [(ngModel)]="reservationTime">
+                                @for (time of availableTimes; track [availableTimes, reservationDate()]) {
+                                    <option>{{ time }}</option>
+                                }
+                            </select>
+                        </div>
+                    } @else {
+                        <p class="text-lg font-semibold mb-1">Продлить бронирование</p>
+                        <div class="select w-full">
+                            <select [(ngModel)]="reservationDuration">
+                                @for (duration of availableDuration; track [availableDuration]) {
+                                    <option>{{ duration }}</option>
+                                }
+                            </select>
+                        </div>
+                    }
+
+                    <button class="large-button mt-3 dark" style="width: 100%; max-width: unset;" (click)="edit()">
+                        @if (openedMenu === 0) {
+                            Перенести
+                        } @else {
+                            Продлить
+                        }
+                    </button>
+                </div>
+            </div>
+        }
+
+        @if (booking.table_name.includes('room') && booking.status === 'creator') {
+            <div class="invite-link">
+                <p style="padding: 0 16px;" class="font-semibold text-xl">Пригласить коллегу</p>
+                <div class="flex flex-row items-center gap-6">
+                    <div (click)="copyLink()" class="scroll-container cursor-pointer">
+                        <div class="w-fit">
+                            <p>{{ booking.invite_url }}</p>
+                        </div>
+                    </div>
+                    <div class="icons">
+                        <div (click)="sendLink()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if ((booking['features'] ?? []).length !== 0) {
+            <div class="tags">
+                <p style="padding: 0 16px;" class="font-semibold text-xl mb-3">Запросы создателя</p>
+                <div class="scroll-container">
+                    <div class="scroll-content">
+                        @for (feature of booking['features']; track booking) {
+                            <div class="tag">
+                                <img [src]="getImgName(feature)">
+                                <p>{{ feature }}</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="w-full flex flex-col gap-5">
+            <div style="padding: 0 16px;" class="flex mt-5 mb-2 flex-row justify-between items-center">
+                <p class="w-full text-3xl flex flex-row items-center font-semibold gap-3">
+                    Участники
+                </p>
+                <p class="w-[60px]">{{ members().length }} / {{ booking.people_amount }}</p>
+            </div>
+
+            @for (mem of members(); track members()) {
+                <div [class.is-admin]="isAdmin(mem)" class="card">
+                    <div>
+                        <p class="text-xl font-semibold tracking-wide">{{ mem.first_name }}</p>
+                        @if (isAdmin(mem)) {
+                            <p class="text-text-secondary flex flex-row items-center gap-1">{{ status }}</p>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    } @else {
+        <div style="margin: 0 auto; width: fit-content">
+            <mat-spinner color="blue" diameter="50"/>
+        </div>
+    }
+</div>
+
+<div class="bg" (click)="close()" #background></div>
